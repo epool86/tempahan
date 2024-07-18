@@ -28,12 +28,34 @@ Route::get('/contact', [
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/firstlogin', function(){
+    $user = Auth::User();
+    if($user->role == 'admin'){
+        return redirect()->route('admin.dashboard');
+    } else {
+        return redirect()->route('user.dashboard');
+    }
+});
 
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
+Route::group([
+    'prefix' => 'admin', 
+    'as' => 'admin.',
+    'middleware' => ['auth'],
+], function(){
 
-//Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-//Route::get('/user/create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
-//Route::get('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
+    Route::resource('user', 'App\Http\Controllers\UserController');
+    Route::resource('room', 'App\Http\Controllers\RoomController');
 
-Route::resource('user', 'App\Http\Controllers\UserController'); //index,create,store,edit,update,show,delete
+});
+
+Route::group([
+    'prefix' => 'user', 
+    'as' => 'user.',
+    'middleware' => ['auth'],
+], function(){
+
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboardUser'])->name('dashboard');
+
+});
+

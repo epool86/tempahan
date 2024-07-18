@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 
@@ -26,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user_form');
+        $user = new User;
+        return view('admin.user_form', compact('user'));
     }
 
     /**
@@ -39,11 +41,26 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'nullable',
             'role' => 'required|in:user,admin',
             'password' => 'required|min:8|confirmed',
         ]);
+
+        $user = new User;
+
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->phone = $request['phone'];
+        $user->role = $request['role'];
+
+        $user->password = Hash::make($request['password']);
+
+        $user->save();
+
+        return redirect()->route('admin.user.index');
+
+
     }
 
     /**
@@ -65,7 +82,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.user_form', compact('user'));
     }
 
     /**
@@ -77,7 +95,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'phone' => 'nullable',
+            'role' => 'required|in:user,admin',
+            'password' => 'nullable|min:8|confirmed',
+        ]);
+
+        $user = User::find($id);
+
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->phone = $request['phone'];
+        $user->role = $request['role'];
+
+        if($request['password']){
+            $user->password = Hash::make($request['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.user.index');
     }
 
     /**
@@ -88,6 +127,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete(); //soft delete
+        //$user->forceDelete(); //hard delete
+        return redirect()->route('admin.user.index');
     }
 }

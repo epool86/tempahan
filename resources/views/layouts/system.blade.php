@@ -78,10 +78,10 @@
                 <div class="row">
                     <div class="col-md-2">
 
-                        <a href="{{ route('dashboard') }}" class="btn btn-primary w-100 mb-2">Dashboard</a>
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary w-100 mb-2">Dashboard</a>
                         <a href="" class="btn btn-primary w-100 mb-2">Manage Booking</a>
-                        <a href="{{ route('user.index') }}" class="btn btn-primary w-100 mb-2">Manage Users</a>
-                        <a href="" class="btn btn-primary w-100 mb-2">Manage Room</a>
+                        <a href="{{ route('admin.user.index') }}" class="btn btn-primary w-100 mb-2">Manage Users</a>
+                        <a href="{{ route('admin.room.index') }}" class="btn btn-primary w-100 mb-2">Manage Room</a>
                         <a href="" class="btn btn-primary w-100 mb-2">Reports</a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();" class="btn btn-danger w-100 mb-2">Logout</a>

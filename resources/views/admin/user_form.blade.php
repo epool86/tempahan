@@ -7,12 +7,22 @@
 @endsection
 
 @section('content')
-<form method="POST" action="{{ route('user.store') }}">
+
+@if($user->id)
+	@php($route = route('admin.user.update', $user->id))
+	@php($method = 'PUT')
+@else
+	@php($route = route('admin.user.store'))
+	@php($method = 'POST')
+@endif
+
+<form method="POST" action="{{ $route }}">
+	<input type="hidden" name="_method" value="{{ $method }}">
 	@csrf
 
 	<div class="mb-3">
 		<label for="">Name</label>
-		<input type="text" class="form-control" name="name" id="" value="{{ old('name') }}">
+		<input type="text" class="form-control" name="name" id="" value="{{ old('name', $user->name) }}">
 		@error('name')
 		<span class="text-danger">{{ $message }}</span>
 		@enderror
@@ -20,7 +30,7 @@
 
 	<div class="mb-3">
 		<label for="">Email</label>
-		<input type="text" class="form-control" name="email" id="" value="{{ old('email') }}">
+		<input type="text" class="form-control" name="email" id="" value="{{ old('email', $user->email) }}">
 		@error('email')
 		<span class="text-danger">{{ $message }}</span>
 		@enderror
@@ -28,7 +38,7 @@
 
 	<div class="mb-3">
 		<label for="">Phone</label>
-		<input type="text" class="form-control" name="phone" id="" value="{{ old('phone') }}">
+		<input type="text" class="form-control" name="phone" id="" value="{{ old('phone', $user->phone) }}">
 		@error('phone')
 		<span class="text-danger">{{ $message }}</span>
 		@enderror
@@ -37,8 +47,8 @@
 	<div class="mb-3">
 		<label for="">Role</label>
 		<select class="form-control" name="role" id="">
-			<option value="user">User</option>
-			<option value="admin">Admin</option>
+			<option @if(old('role', $user->role) == 'user') selected @endif value="user">User</option>
+			<option @if(old('role', $user->role) == 'admin') selected @endif value="admin">Admin</option>
 		</select>
 		@error('role')
 		<span class="text-danger">{{ $message }}</span>

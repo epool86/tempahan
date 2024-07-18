@@ -8,7 +8,7 @@
 
 @section('content')
 
-<a href="{{ route('user.create') }}" class="btn btn-primary">Add User</a>
+<a href="{{ route('admin.user.create') }}" class="btn btn-primary">Add User</a>
 
 <table class="table table-bordered">
 	<tr>
@@ -28,7 +28,12 @@
 		<td>{{ $user->phone }}</td>
 		<td>{{ $user->role }}</td>
 		<td>
-			<a href="" class="btn btn-sm btn-primary">Edit</a>
+			<form method="POST" action="{{ route('admin.user.destroy', $user->id) }}">
+				<input type="hidden" name="_method" value="DELETE">
+				@csrf
+				<a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm btn-primary">Edit</a>
+				<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+			</form>
 		</td>
 	</tr>
 	@endforeach

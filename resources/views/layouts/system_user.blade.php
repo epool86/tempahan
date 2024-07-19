@@ -79,7 +79,7 @@
                     <div class="col-md-2">
 
                         <a href="{{ route('user.dashboard') }}" class="btn btn-primary w-100 mb-2">Dashboard</a>
-                        <a href="" class="btn btn-primary w-100 mb-2">My Booking</a>
+                        <a href="{{ route('user.room.index') }}" class="btn btn-primary w-100 mb-2">My Booking</a>
                         <a href="" class="btn btn-primary w-100 mb-2">Profile</a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();" class="btn btn-danger w-100 mb-2">Logout</a>

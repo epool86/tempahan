@@ -10,4 +10,9 @@ class Room extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function bookings(){
+        return $this->hasMany('App\Models\Booking');
+    }
+    
 }

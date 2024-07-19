@@ -46,6 +46,7 @@ Route::group([
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
     Route::resource('user', 'App\Http\Controllers\UserController');
     Route::resource('room', 'App\Http\Controllers\RoomController');
+    Route::resource('booking', 'App\Http\Controllers\BookingController');
 
 });
 
@@ -56,6 +57,10 @@ Route::group([
 ], function(){
 
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboardUser'])->name('dashboard');
+    Route::get('/room', [App\Http\Controllers\User\BookingController::class, 'index'])->name('room.index');
+    Route::get('/room/{id}', [App\Http\Controllers\User\BookingController::class, 'booking'])->name('room.booking');
+    Route::post('/room/{id}', [App\Http\Controllers\User\BookingController::class, 'bookingPost'])->name('room.booking.post');
+    Route::get('/booking/{id}/cancel', [App\Http\Controllers\User\BookingController::class, 'bookingCancel'])->name('booking.cancel');
 
 });
 

@@ -17,7 +17,7 @@
 			@endforeach
 		</select>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<select class="form-control mb-2" name="month" id="month" onchange="filter()">
 			<option @if($month == "ALL") selected @endif value="ALL">All Month</option>
 			<option @if($month == 1)  selected @endif value="1" >January</option>
@@ -34,7 +34,7 @@
 			<option @if($month == 12) selected @endif value="12">December</option>
 		</select>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<select class="form-control mb-2" name="year" id="year" onchange="filter()">
 			<option @if($year == "ALL") selected @endif value="ALL">All Year</option>
 			<option @if($year == 2023) selected @endif value="2023">2023</option>
@@ -42,8 +42,12 @@
 			<option @if($year == 2025) selected @endif value="2025">2025</option>
 		</select>
 	</div>
+	<div class="col-md-2">
+		<input type="text" class="form-control" name="search" id="search" value="{{ $search }}" onkeyup="search(event)">
+	</div>
 	<div class="col-md-3">
-		<input type="text" class="form-control" name="search" id="search" onkeyup="search()">
+		<a href="{{ route('admin.booking.pdf') }}" target="_blank" class="btn btn-primary">PDF</a>
+		<a href="{{ route('admin.booking.excel') }}" target="_blank" class="btn btn-info">Excel</a>
 	</div>
 </div>
 
@@ -60,8 +64,16 @@
 	@foreach($bookings as $booking)
 	<tr>
 		<td>{{ ++$i }}</td>
-		<td>{{ $booking->user->name }}</td>
-		<td>{{ $booking->room->name }}</td>
+		<td>
+			@if($booking->user)
+				{{ $booking->user->name }}
+			@endif
+		</td>
+		<td>
+			@if($booking->room)
+				{{ $booking->room->name }}
+			@endif
+		</td>
 		<td>{{ $booking->booking_date }}</td>
 		<td>
 			@if($booking->status == 0)
@@ -105,9 +117,14 @@
 
 	}
 
-	function search(){
+	function search(e){
 
-		
+		var key = e.keyCode || e.which;
+
+		if(key == 13){
+			filter();
+		}
+
 	}
 
 </script>

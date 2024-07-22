@@ -10,11 +10,11 @@ class Booking extends Model
     use HasFactory;
 
     public function room(){
-        return $this->belongsTo('App\Models\Room');
+        return $this->belongsTo('App\Models\Room')->withTrashed();
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
     
 }

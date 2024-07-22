@@ -16,7 +16,8 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::all();
+        $rooms = Room::all(); //return record yg belum kena delete
+        //$rooms = Room::withTrashed()->get(); //return record termasuk dah kena delete
         return view('admin.room_index', compact('rooms'));
     }
 

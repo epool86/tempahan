@@ -46,7 +46,10 @@ Route::group([
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
     Route::resource('user', 'App\Http\Controllers\UserController');
     Route::resource('room', 'App\Http\Controllers\RoomController');
+    Route::get('/booking/pdf', [App\Http\Controllers\BookingController::class, 'pdf'])->name('booking.pdf');
+    Route::get('/booking/excel', [App\Http\Controllers\BookingController::class, 'excel'])->name('booking.excel');
     Route::resource('booking', 'App\Http\Controllers\BookingController');
+
 
 });
 

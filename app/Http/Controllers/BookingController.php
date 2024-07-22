@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Room;
 use App\Models\Booking;
+use App\Exports\BookingList;
+
+use PDF;
 
 class BookingController extends Controller
 {
@@ -19,6 +23,7 @@ class BookingController extends Controller
         $room_id = isset($_GET['room_id']) ? $_GET['room_id'] : "ALL";
         $month = isset($_GET['month']) ? $_GET['month'] : "ALL";
         $year = isset($_GET['year']) ? $_GET['year'] : "ALL";
+        $search = isset($_GET['search']) ? $_GET['search'] : null;
 
         $bookings = Booking::query();
 
@@ -34,10 +39,24 @@ class BookingController extends Controller
             $bookings = $bookings->whereYear('booking_date', $year);
         }
 
+        if($search){
+
+            $bookings = $bookings->where(function($query) use ($search){
+
+                $query->whereHas('user', function($query) use ($search){
+                    $query->where('name', 'LIKE', '%'.$search.'%');
+                    $query->orWhere('email', 'LIKE', '%'.$search.'%');
+                })->orWhereHas('room', function($query) use ($search){
+                    $query->where('name', 'LIKE', '%'.$search.'%');
+                });
+
+            });
+        }
+
         $bookings = $bookings->paginate(5);
 
         $rooms = Room::orderBy('name','ASC')->get();
-        return view('admin.booking_index', compact('bookings', 'rooms', 'room_id', 'month', 'year'));
+        return view('admin.booking_index', compact('bookings', 'rooms', 'room_id', 'month', 'year', 'search'));
     }
 
     /**
@@ -115,5 +134,19 @@ class BookingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function pdf()
+    {
+        $bookings = Booking::all();
+        $pdf = PDF::loadView('admin.booking_pdf', compact('bookings'));
+
+        return $pdf->setPaper('a4', 'landscape')->stream('booking_list.pdf');
+
+    }
+
+    public function excel()
+    {
+        return Excel::download(new BookingList, 'booking_list.xlsx');
     }
 }

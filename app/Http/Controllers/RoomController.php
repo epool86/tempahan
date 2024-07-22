@@ -47,12 +47,14 @@ class RoomController extends Controller
             'status' => 'required|in:0,1',
         ]);
 
-        $room = new Room;
+        $room = new Room($request->only('name','description','size','status'));
 
-        $room->name = $request['name'];
-        $room->description = $request['description'];
-        $room->size = $request['size'];
-        $room->status = $request['status'];
+        //$room->name = $request['name'];
+        //$room->description = $request['description'];
+        //$room->size = $request['size'];
+        //$room->status = $request['status'];
+
+        //$room->save($request->all());
 
         if($request['photo']){
 

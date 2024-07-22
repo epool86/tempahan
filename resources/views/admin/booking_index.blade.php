@@ -8,6 +8,45 @@
 
 @section('content')
 
+<div class="row">
+	<div class="col-md-3">
+		<select class="form-control mb-2" name="room_id" id="room_id" onchange="filter()">
+			<option @if($room_id == "ALL") selected @endif value="ALL">All Room</option>
+			@foreach($rooms as $room)
+				<option @if($room_id == $room->id) selected @endif value="{{ $room->id }}">{{ $room->name }}</option>
+			@endforeach
+		</select>
+	</div>
+	<div class="col-md-3">
+		<select class="form-control mb-2" name="month" id="month" onchange="filter()">
+			<option @if($month == "ALL") selected @endif value="ALL">All Month</option>
+			<option @if($month == 1)  selected @endif value="1" >January</option>
+			<option @if($month == 2)  selected @endif value="2" >February</option>
+			<option @if($month == 3)  selected @endif value="3" >March</option>
+			<option @if($month == 4)  selected @endif value="4" >April</option>
+			<option @if($month == 5)  selected @endif value="5" >May</option>
+			<option @if($month == 6)  selected @endif value="6" >June</option>
+			<option @if($month == 7)  selected @endif value="7" >July</option>
+			<option @if($month == 8)  selected @endif value="8" >August</option>
+			<option @if($month == 9)  selected @endif value="9" >September</option>
+			<option @if($month == 10) selected @endif value="10">October</option>
+			<option @if($month == 11) selected @endif value="11">November</option>
+			<option @if($month == 12) selected @endif value="12">December</option>
+		</select>
+	</div>
+	<div class="col-md-3">
+		<select class="form-control mb-2" name="year" id="year" onchange="filter()">
+			<option @if($year == "ALL") selected @endif value="ALL">All Year</option>
+			<option @if($year == 2023) selected @endif value="2023">2023</option>
+			<option @if($year == 2024) selected @endif value="2024">2024</option>
+			<option @if($year == 2025) selected @endif value="2025">2025</option>
+		</select>
+	</div>
+	<div class="col-md-3">
+		<input type="text" class="form-control" name="search" id="search" onkeyup="search()">
+	</div>
+</div>
+
 <table class="table table-bordered">
 	<tr>
 		<th>#</th>
@@ -51,6 +90,26 @@
 	@endforeach
 </table>
 
-{!! $bookings->render() !!}
+{!! $bookings->appends($_GET)->render() !!}
+
+<script type="text/javascript">
+
+	function filter(){
+
+		var room_id = document.getElementById("room_id").value;
+		var month = document.getElementById("month").value;
+		var year = document.getElementById("year").value;
+		var search = document.getElementById("search").value;
+
+		self.location = "?room_id=" + room_id + "&month=" + month + "&year=" + year + "&search=" + search;
+
+	}
+
+	function search(){
+
+		
+	}
+
+</script>
 
 @endsection

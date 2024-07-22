@@ -16,8 +16,28 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::paginate(5);
-        return view('admin.booking_index', compact('bookings'));
+        $room_id = isset($_GET['room_id']) ? $_GET['room_id'] : "ALL";
+        $month = isset($_GET['month']) ? $_GET['month'] : "ALL";
+        $year = isset($_GET['year']) ? $_GET['year'] : "ALL";
+
+        $bookings = Booking::query();
+
+        if($room_id != 'ALL'){
+            $bookings = $bookings->where('room_id', $room_id);
+        }
+
+        if($month != 'ALL'){
+            $bookings = $bookings->whereMonth('booking_date', $month);
+        }
+
+        if($year != 'ALL'){
+            $bookings = $bookings->whereYear('booking_date', $year);
+        }
+
+        $bookings = $bookings->paginate(5);
+
+        $rooms = Room::orderBy('name','ASC')->get();
+        return view('admin.booking_index', compact('bookings', 'rooms', 'room_id', 'month', 'year'));
     }
 
     /**

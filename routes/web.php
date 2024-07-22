@@ -40,7 +40,7 @@ Route::get('/firstlogin', function(){
 Route::group([
     'prefix' => 'admin', 
     'as' => 'admin.',
-    'middleware' => ['auth'],
+    'middleware' => ['auth','admin'],
 ], function(){
 
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');

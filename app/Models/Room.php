@@ -11,6 +11,10 @@ class Room extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'name','description','size','status',
+    ];
+
     public function bookings(){
         return $this->hasMany('App\Models\Booking');
     }

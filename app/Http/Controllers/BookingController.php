@@ -56,6 +56,7 @@ class BookingController extends Controller
         $bookings = $bookings->paginate(5);
 
         $rooms = Room::orderBy('name','ASC')->get();
+
         return view('admin.booking_index', compact('bookings', 'rooms', 'room_id', 'month', 'year', 'search'));
     }
 
@@ -86,9 +87,9 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Booking $booking)
     {
-        //
+        return view('admin.booking_show', compact('booking'));
     }
 
     /**
@@ -114,14 +115,21 @@ class BookingController extends Controller
         $booking = Booking::find($id);
 
         if($request['action'] == 'approve'){
+
             $booking->status = 1;
+            Session()->flash('message', 'Booking has been successfully approved!');
+
         } elseif($request['action'] == 'reject'){
+
             $booking->status = 2;
+            Session()->flash('message', 'Booking has been successfully rejected!');
         }
 
         $booking->save();
 
-        return redirect()->route('admin.booking.index');
+        return redirect()->route('admin.booking.index', [
+            'page' => $request['page'],
+        ]);
 
     }
 

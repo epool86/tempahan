@@ -8,6 +8,16 @@
 
 @section('content')
 
+@if(Session::has('message'))
+<div class="row">
+	<div class="col-md-12">
+		<div class="alert alert-success">
+			{{ Session::get('message') }}
+		</div>
+	</div>
+</div>
+@endif
+
 <div class="row">
 	<div class="col-md-3">
 		<select class="form-control mb-2" name="room_id" id="room_id" onchange="filter()">
@@ -74,7 +84,11 @@
 				{{ $booking->room->name }}
 			@endif
 		</td>
-		<td>{{ $booking->booking_date }}</td>
+		<td>
+			<a href="{{ route('admin.booking.show', $booking->id) }}">
+				{{ $booking->booking_date }}
+			</a>
+		</td>
 		<td>
 			@if($booking->status == 0)
 				<span class="badge bg-warning">Pending</span>
@@ -88,6 +102,7 @@
 			@if($booking->status == 0)
 			<form method="POST" action="{{ route('admin.booking.update', $booking->id) }}">
 				<input type="hidden" name="_method" value="PUT">
+				<input type="hidden" name="page" value="{{ isset($_GET['page']) ? $_GET['page'] : 1 }}">
 				@csrf
 				<button type="submit" name="action" value="approve" class="btn btn-success btn-sm" onclick="return confirm('Are you sure to approve this booking?');">
 					Approve

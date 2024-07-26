@@ -37,6 +37,8 @@ Route::get('/firstlogin', function(){
     }
 });
 
+Route::get('/language', [App\Http\Controllers\LanguageController::class, 'changeLanguage'])->name('language');
+
 Route::group([
     'prefix' => 'admin', 
     'as' => 'admin.',
